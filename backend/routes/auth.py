@@ -14,10 +14,10 @@ def register():
     data = request.json
     if not all(k in data for k in ("email", "password", "name", "age")):
         return jsonify({"message": "Missing fields"}), 400
-    if not isinstance(data['age'], int) or data['age'] < 0:
+    if  int(data['age']) < 0:
         return jsonify({"message": "Invalid age"}), 400
 
-    user = User.create_user(data['email'], data['password'], data['name'], data['age'])
+    user = User.create_user(data['email'], data['password'], data['name'], int(data['age']))
     
     if not user:
         return jsonify({"message": "User already exists"}), 400
@@ -34,12 +34,19 @@ def login():
         access_token = create_access_token(identity=user['email'])
         refresh_token = create_refresh_token(identity=user['email'])
 
-        response = jsonify({"message": "Login successful"})
-        set_access_cookies(response, access_token)
-        set_refresh_cookies(response, refresh_token)  # 🔹 Secure refresh token in cookies
+        response = jsonify({"message": "Login successful", "access_token":access_token, "refresh_token":refresh_token})
+        response.set_cookie(
+            "access_token", access_token, 
+            max_age=1200, httponly=True, samesite="None", secure=False  # Secure=True in prod
+        )
+        response.set_cookie(
+            "refresh_token", refresh_token, 
+            max_age=604800, httponly=True, samesite="None", secure=False
+        )
         return response, 200
 
     return jsonify({"message": "Invalid credentials"}), 401
+
 
 # 🔹 Profile Route (Auto Refresh Token)
 @auth_bp.route('/profile', methods=['GET'])

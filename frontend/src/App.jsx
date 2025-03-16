@@ -1,20 +1,19 @@
-import { useState } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Auth from "./components/Auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import Auth from "./pages/Auth";
 import Profile from "./components/Profile";
+import Login from "./components/Login";
 
 function App() {
   return (
-    <>
-      {/* <h1 className="text-3xl font-bold underline">Hello world!</h1> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Auth />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        {/* <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/profile" element={<Profile />} /> */}
+      </Routes>
+    </Router>
   );
 }
 

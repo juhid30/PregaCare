@@ -1,4 +1,7 @@
 from flask import Blueprint
 
-# This ensures the folder is recognized as a package
-auth_bp = Blueprint("auth", __name__)
+# ✅ Define blueprint first
+auth_bp = Blueprint('auth', __name__)
+
+# ✅ Import routes after defining blueprint (to prevent circular import)
+from .auth import *

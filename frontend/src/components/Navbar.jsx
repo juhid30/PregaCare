@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FiMenu, FiX } from "react-icons/fi";
-
+import { useNavigate } from "react-router-dom";
 const navigation = [
   // { name: "Home", href: "#" },
   { name: "Weekly Tracker", href: "#tracker" },
@@ -12,7 +12,19 @@ const navigation = [
 
 function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    const user = localStorage.getItem("pregnancyProfileData");
+    setIsLoggedIn(!!user);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("pregnancyProfileData");
+    setIsLoggedIn(false); // Or redirect to home/login page
+    navigate("/");
+  };
   return (
     <header className="fixed w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm">
       <nav
@@ -46,9 +58,15 @@ function Navbar() {
                 {item.name}
               </a>
             ))}
-            <a href="/auth" className="btn-primary text-sm">
-              Sign In
-            </a>
+            {isLoggedIn ? (
+              <button onClick={handleLogout} className="btn-primary text-sm">
+                Logout
+              </button>
+            ) : (
+              <a href="/login" className="btn-primary text-sm">
+                Sign In
+              </a>
+            )}
           </div>
         </div>
       </nav>
@@ -89,12 +107,21 @@ function Navbar() {
                 ))}
               </div>
               <div className="py-6">
-                <a
-                  href="/auth"
-                  className="block px-3 py-2.5 text-base font-semibold leading-7 text-white bg-primary-600 rounded-lg text-center"
-                >
-                  Sign In
-                </a>
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full px-3 py-2.5 text-base font-semibold leading-7 text-white bg-primary-600 rounded-lg text-center"
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <a
+                    href="/auth"
+                    className="block px-3 py-2.5 text-base font-semibold leading-7 text-white bg-primary-600 rounded-lg text-center"
+                  >
+                    Sign In
+                  </a>
+                )}
               </div>
             </div>
           </div>

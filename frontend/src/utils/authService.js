@@ -1,16 +1,32 @@
 import axios from "axios";
 
 const API_URL = "http://127.0.0.1:5000";
+const AUTH_URL = "http://127.0.0.1:5000/auth";
 
 // ✅ Login Function - Ensures Cookies Are Stored
 export const login = async (email, password) => {
   await axios.post(
-    `${API_URL}/login`,
+    `${AUTH_URL}/login`,
     { email, password },
     {
       withCredentials: true, // ✅ Ensures cookies are sent
     }
   );
+};
+export const register = async (formData, navigate) => {
+  console.log(formData);
+  try {
+    const response = await axios.post(`${AUTH_URL}/register`, formData, {
+      withCredentials: true, // ✅ Ensures cookies are sent
+    });
+    console.log(response);
+    if (response.status === 201) {
+      navigate("/login"); // ✅ Redirect after successful registration
+    }
+  } catch (error) {
+    console.error("Registration error:", error);
+    alert(error.response?.data?.message || "Registration failed");
+  }
 };
 
 // ✅ Fetch Protected Data - Ensures Cookies Are Sent

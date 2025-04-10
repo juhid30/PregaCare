@@ -10,12 +10,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route path="/login" element={<Auth />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/dashboard" element={<Dashboard/>}/>
-        <Route path="/onboarding" element={<PregnancyOnboardingForm/>}/>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/onboard" element={<PregnancyOnboardingForm />} />
       </Routes>
     </Router>
   );

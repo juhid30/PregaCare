@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { FiCalendar, FiHeart } from "react-icons/fi";
 import mother from "../assets/mom.png";
+import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <div className="relative overflow-hidden min-h-screen section-padding pt-16 pb-32 ">
       <div className="container-width mt-16 sm:mt-24">
@@ -23,7 +25,12 @@ const HeroSection = () => {
               and connect with a supportive community of expecting parents.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="btn-primary flex items-center justify-center gap-2">
+              <button
+                onClick={() => {
+                  navigate("/dashboard");
+                }}
+                className="btn-primary flex items-center justify-center gap-2"
+              >
                 <FiCalendar className="h-5 w-5" />
                 Track Your Pregnancy
               </button>

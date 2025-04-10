@@ -12,13 +12,37 @@ auth_bp = Blueprint('auth', __name__)
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.json
-    if not all(k in data for k in ("email", "password", "name", "age")):
-        return jsonify({"message": "Missing fields"}), 400
-    if  int(data['age']) < 0:
-        return jsonify({"message": "Invalid age"}), 400
 
-    user = User.create_user(data['email'], data['password'], data['name'], int(data['age']))
-    
+    required_fields = [
+        "email", "password", "firstName", "lastName", "dueDate",
+        "lastPeriodDate", "pregnancyWeek", "firstPregnancy",
+        "previousPregnancies", "healthConditions", "otherCondition",
+        "obGynName", "obGynContact", "hospitalName",
+        "emergencyContact", "emergencyPhone"
+    ]
+
+    # if not all(field in data for field in required_fields):
+    #     return jsonify({"message": "Missing fields"}), 400
+
+    full_name = f"{data['firstName']} {data['lastName']}"
+    user = User.create_user(
+        email=data["email"],
+        password=data["password"],
+        name=full_name,
+        due_date=data["dueDate"],
+        last_period_date=data["lastPeriodDate"],
+        pregnancy_week=data["pregnancyWeek"],
+        first_pregnancy=data["firstPregnancy"],
+        previous_pregnancies=data["previousPregnancies"],
+        health_conditions=data["healthConditions"],
+        other_condition=data["otherCondition"],
+        obgyn_name=data["obGynName"],
+        obgyn_contact=data["obGynContact"],
+        hospital_name=data["hospitalName"],
+        emergency_contact=data["emergencyContact"],
+        emergency_phone=data["emergencyPhone"],
+    )
+
     if not user:
         return jsonify({"message": "User already exists"}), 400
 

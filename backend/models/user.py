@@ -4,21 +4,36 @@ from flask import current_app
 class User:
     
     @staticmethod
-    def create_user(email, password, name, age):
-        
+    def create_user(email, password, name, due_date, last_period_date,
+                    pregnancy_week, first_pregnancy, previous_pregnancies,
+                    health_conditions, other_condition, obgyn_name, obgyn_contact,
+                    hospital_name, emergency_contact, emergency_phone):
+
         if User.find_by_email(email):
             return None
-        
+
         hashed_password = generate_password_hash(password)
         user = {
             "email": email,
             "password": hashed_password,
             "name": name,
-            "age": age
+            "due_date": due_date,
+            "last_period_date": last_period_date,
+            "pregnancy_week": pregnancy_week,
+            "first_pregnancy": first_pregnancy,
+            "previous_pregnancies": previous_pregnancies,
+            "health_conditions": health_conditions,
+            "other_condition": other_condition,
+            "obgyn_name": obgyn_name,
+            "obgyn_contact": obgyn_contact,
+            "hospital_name": hospital_name,
+            "emergency_contact": emergency_contact,
+            "emergency_phone": emergency_phone
         }
-        with current_app.app_context():  # ✅ Use app context to get db
+
+        with current_app.app_context():
             db = current_app.db
-            db.users.insert_one(user)  # ✅ No more circular import
+            db.users.insert_one(user)
         return user
 
     @staticmethod
